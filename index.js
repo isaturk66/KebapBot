@@ -257,7 +257,7 @@ client.on("message", async message => {
         } else if(userRecords[user.id] != undefined){
           return message.reply("Takım üyelerinden <@" + user.id.toString() + "> 'nın başka bir takım daveti var. Yeni bir takıma davet edilebilmesi için var olan daveti reddetmesi gerekiyor. Özel mesajlarına göz at!");
         }else {mentionsMemberList.push(member);
-          message.channel.send("<@"+message.author.id+">"+" Takım kayıt işlemi başlamıştır. Lütfen tüm takım üyeleri özel mesajlarını kontrol etsin! ");
+         
         }
       } catch (error) {
         console.log("error notced");
@@ -265,6 +265,7 @@ client.on("message", async message => {
       }
     });
 
+    message.channel.send("<@"+message.author.id+">"+" Takım kayıt işlemi başlamıştır. Lütfen tüm takım üyeleri özel mesajlarını kontrol etsin! ");
 
     if (!shallStop) {
       const teamuid = uuid.v4();
