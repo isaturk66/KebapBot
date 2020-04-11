@@ -220,7 +220,52 @@ client.on("message", async message => {
   if (command === "kurallar") {
     message.channel.send("Kurallar:");
   }
-  
+  if(command === "forceKayıt"){
+    const kayitArgs = message.content.slice(config.prefix.length + 5).split(',');
+    if (kayitArgs.length != 2) {
+      return message.reply("Üzgünüm, komut doğru formatta değil \n \n Format: \n !kayıt takım adı , @yarışmacı1 @yarışmacı2");
+    }
+
+    if (message.mentions.users.size < 1) {
+      return message.reply("Hiç takım üyesi eklemedin!");
+    }
+
+    var teamName = capitalize(kayitArgs[0].toString().trim())
+
+    var mentionsMemberList = [];
+
+
+    await message.mentions.users.forEach(async (user) => {
+      try {
+
+        var member = message.guild.member(user);
+        var memberRoleList = [];
+
+        
+
+        member.roles.cache.forEach((role) => {
+          if (!allowedRolesForTeamMembers.includes(role.name)) {
+            memberRoleList.push(memberRoleList);
+          }
+        });
+
+        if (memberRoleList.length > 0) {
+          shallStop = true
+          return message.reply("Takım üyelerinden <@" + user.id.toString() + "> başka bir takıma kayıtlı. \n Kayıt sürecindeki bir sorun dahilinde moderatörlere yazabilirsiniz");
+        } else if(userRecords[user.id] != undefined){
+          return message.reply("Takım üyelerinden <@" + user.id.toString() + "> 'nın başka bir takım daveti var. Yeni bir takıma davet edilebilmesi için var olan daveti reddetmesi gerekiyor. Özel mesajlarına göz at!");
+        }else {mentionsMemberList.push(member);
+         
+        }
+      } catch (error) {
+        console.log("error notced");
+        console.log(error)
+      }
+    });
+
+    registerTeam(message.guild,mentionsMemberList,teamName);
+
+  }
   if (command === "kayıt") {
     shallStop = false;
     const kayitArgs = message.content.slice(config.prefix.length + 5).split(',');
